@@ -8,12 +8,34 @@ Mechanism provenance: the grounded-citation ledger pattern is adapted from the
 Hermes `grounded-citations` skill (Hermes Agent + Teknium, MIT-licensed). This
 is an independent, clean-room implementation.
 
-## Why
+## Why this exists (the failure class)
 
 An LLM that writes `[3]` from memory invents URLs and drifts numbering. If a
 script issues the id the moment a page is fetched, and the model may only emit
 ids the ledger handed it, then every citation resolves to a real retrieved URL
 and `verify` can gate delivery mechanically.
+
+Plain numbering gets two things wrong, and this tool exists because both are
+load-bearing:
+
+- **The id is the provenance.** A `[3]` typed from memory is a claim that was
+  never grounded; a `[3]` issued at retrieval is a receipt. Only the latter is
+  checkable.
+- **A paraphrase can pass as evidence.** The verbatim-quote gate closes this:
+  the tool refuses a supporting quote unless its exact wording appears in the
+  fetched page, whitespace/case/markdown-insensitive.
+
+## Prior art
+
+This is an independent, clean-room implementation of the **grounded-citation
+ledger** pattern (Hermes Agent `grounded-citations`, MIT). The transferable
+mechanism — ids issued at retrieval, a verbatim gate that rejects paraphrase,
+`[unverified]` for declared unknowns, and a `verify` gate — was identified as
+the single highest-leverage *foreign* tool to adopt from a systematic pass over
+a large agent-skill inventory. This repo is that mechanism, extracted and
+stdlib-only.
+
+## The two provenance upgrades
 
 Two provenance upgrades sit on top of plain numbering:
 
